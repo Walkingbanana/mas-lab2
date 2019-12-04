@@ -15,6 +15,14 @@ public abstract class AbstractAgent implements BidderAgent {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractAgent that = (AbstractAgent) o;
+        return agentID == that.agentID;
+    }
+
+    @Override
     public int hashCode() {
         return getAgentID();
     }

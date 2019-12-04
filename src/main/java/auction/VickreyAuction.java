@@ -46,7 +46,6 @@ public class VickreyAuction extends AbstractAuction {
             secondHighestWinningPrice = (highestWinningPrice + startingPrice) / 2;
         }
 
-
         Map<BidderAgent, Double> bidMap = new HashMap<>();
         for (int i = 0; i < bids.length; i++) {
             bidMap.put(agents.get(i), bids[i]);

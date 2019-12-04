@@ -15,7 +15,6 @@ public class MASBidderAgent extends AbstractAgent {
     private final double increaseFactor;
     private final double decreaseFactor;
 
-
     public MASBidderAgent(double increaseFactor, double decreaseFactor) {
         super();
         this.increaseFactor = increaseFactor;
@@ -36,9 +35,11 @@ public class MASBidderAgent extends AbstractAgent {
         }
     }
 
-    public void startAuction(List<Seller> sellers) {
+    public void startAuction(List<Seller> sellers)
+    {
+        biddingFactors = new HashMap<>();
         for (Seller seller : sellers) {
-            this.biddingFactors.put(seller, random.nextDouble() * 1337);
+            this.biddingFactors.put(seller, random.nextDouble());
         }
     }
 }
