@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface BidderAgent {
 
-    public double bid(Seller seller, double startingPrice);
+    int getAgentID();
+
+    double bid(Seller seller, double startingPrice);
 
     void update(AuctionResult result);
 
-    public void startAuction(List<Seller> sellers);
+    void startAuction(List<Seller> sellers);
 }

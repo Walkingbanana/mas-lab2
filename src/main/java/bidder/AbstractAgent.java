@@ -3,7 +3,7 @@ package bidder;
 public abstract class AbstractAgent implements BidderAgent {
     private static int nextAgentID = 0;
 
-    private int agentID = getAgentID();
+    private int agentID;
 
     public AbstractAgent() {
         this.agentID = nextAgentID;

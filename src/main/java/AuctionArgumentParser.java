@@ -7,6 +7,7 @@ public class AuctionArgumentParser
     private Option buyersOption;
     private Option roundsOption;
     private Option startingPriceOption;
+    private Option outputFilePath;
 
     private CommandLine cmd;
 
@@ -29,6 +30,10 @@ public class AuctionArgumentParser
         startingPriceOption = new Option("S", "startingPrice", true, "The universal maximum starting price");
         startingPriceOption.setRequired(true);
         allOptions.addOption(startingPriceOption);
+
+        outputFilePath = new Option("outputFile", "outputFile", true, "The filepath in which the simulation will write the results.");
+        outputFilePath.setOptionalArg(true);
+        allOptions.addOption(outputFilePath);
     }
 
     public void parse(String[] args) throws ParseException
@@ -61,5 +66,10 @@ public class AuctionArgumentParser
     public int getUniversalStartingPrice()
     {
         return Integer.parseInt(cmd.getOptionValue(startingPriceOption.getOpt()));
+    }
+
+    public String getOutputFilePath()
+    {
+        return outputFilePath.getValue("./output.txt");
     }
 }
