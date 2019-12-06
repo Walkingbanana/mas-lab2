@@ -13,12 +13,12 @@ public class AuctionScenarioResult {
     private List<List<AuctionResult>> roundAuctionResults;
     private List<AuctionResult> currentRound;
 
-    public AuctionScenarioResult(List<BidderAgent> agents) {
+    public AuctionScenarioResult(List<? extends BidderAgent> agents) {
         if (agents == null) {
             throw new IllegalArgumentException();
         }
 
-        this.scenarioResult = new HashMap<BidderAgent, List<AuctionResult>>(agents.size());
+        this.scenarioResult = new HashMap<>(agents.size());
         for (BidderAgent agent : agents) {
             this.scenarioResult.put(agent, new ArrayList<AuctionResult>());
         }

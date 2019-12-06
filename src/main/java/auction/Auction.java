@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface Auction {
 
-    public AuctionResult runAuction(List<BidderAgent> agents, Seller seller);
+    public AuctionResult runAuction(List<? extends BidderAgent> agents, Seller seller);
 
-    public AuctionScenarioResult runAuctionRounds(int rounds, List<Seller> sellers, List<BidderAgent> agents);
+    public AuctionScenarioResult runAuctionRounds(int rounds, List<Seller> sellers, List<? extends BidderAgent> agents);
 
 }

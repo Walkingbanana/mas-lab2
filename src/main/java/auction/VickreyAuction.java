@@ -11,11 +11,16 @@ public class VickreyAuction extends AbstractAuction {
 
     private double maximumStartingPrice;
 
+    public VickreyAuction(double maximumStartingPrice, AuctionMonitor monitor) {
+        super(monitor);
+        this.maximumStartingPrice = maximumStartingPrice;
+    }
+
     public VickreyAuction(double maximumStartingPrice) {
         this.maximumStartingPrice = maximumStartingPrice;
     }
 
-    public AuctionResult runAuction(List<BidderAgent> agents, Seller seller) {
+    public AuctionResult runAuction(List<? extends BidderAgent> agents, Seller seller) {
         double startingPrice = seller.getStartingPrice(maximumStartingPrice);
 
         double[] bids = new double[agents.size()];

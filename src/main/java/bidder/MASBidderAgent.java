@@ -28,8 +28,12 @@ public class MASBidderAgent extends AbstractAgent {
 
     public void update(AuctionResult result) {
         Double biddingFactor = this.biddingFactors.get(result.getSeller());
-        if (this.equals(result.getWinner()) || result.getBids().get(this) >= result.getMarketPrice()) {
-            this.biddingFactors.put(result.getSeller(), biddingFactor * decreaseFactor);
+        if (this.equals(result.getWinner()) || result.getBids().get(this) >= result.getMarketPrice())
+        {
+            double newBiddingFactor = biddingFactor * decreaseFactor;
+            if(newBiddingFactor < 1)
+                newBiddingFactor = 1;
+            this.biddingFactors.put(result.getSeller(), newBiddingFactor);
         } else {
             this.biddingFactors.put(result.getSeller(), biddingFactor * increaseFactor);
         }
@@ -39,7 +43,11 @@ public class MASBidderAgent extends AbstractAgent {
     {
         biddingFactors = new HashMap<>();
         for (Seller seller : sellers) {
-            this.biddingFactors.put(seller, random.nextDouble());
+            this.biddingFactors.put(seller, random.nextDouble() + 1);
         }
+    }
+
+    public Map<Seller, Double> getBiddingFactors() {
+        return biddingFactors;
     }
 }

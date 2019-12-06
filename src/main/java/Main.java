@@ -36,18 +36,21 @@ public class Main {
         }
 
         // Generate all buyers
-        ArrayList<BidderAgent> buyers = new ArrayList<>(parser.getNumberOfBuyers());
+        ArrayList<MASBidderAgent> buyers = new ArrayList<>(parser.getNumberOfBuyers());
         for(int i = 0; i < parser.getNumberOfBuyers(); i++)
         {
-            buyers.add(new MASBidderAgent(0.8, 1.2));
+            buyers.add(new MASBidderAgent(1.2, 0.8));
         }
 
         // Run the auction
-        AbstractAuction auction = new VickreyAuction(parser.getUniversalStartingPrice());
-        AuctionScenarioResult results = auction.runAuctionRounds(parser.getNumberOfRounds(), sellers, buyers);
+        try(AuctionMonitor monitor = new AuctionMonitor(buyers, "./agents_development.csv"))
+        {
+            AbstractAuction auction = new VickreyAuction(parser.getUniversalStartingPrice(), monitor);
+            AuctionScenarioResult results = auction.runAuctionRounds(parser.getNumberOfRounds(), sellers, buyers);
 
-        // Log the results
-        WriteResults(results, parser.getOutputFilePath());
+            // Log the results
+            WriteResults(results, parser.getOutputFilePath());
+        }
     }
 
     public static void WriteResults(AuctionScenarioResult results, String filePath) throws IOException {
@@ -83,7 +86,7 @@ public class Main {
             for(Seller seller : marketPrices.keySet())
             {
                 // Prime example of why Java is fucking stupid, what the fuck is this shit I just wanna concat a double list with a formatter
-                String fuckingOutputFuckShit = String.join(",", marketPrices.get(seller).stream().map(d -> String.format(Locale.ROOT, "%.2f", d)).collect(Collectors.toList()));
+                String fuckingOutputFuckShit = marketPrices.get(seller).stream().map(d -> String.format(Locale.ROOT, "%.2f", d)).collect(Collectors.joining(","));
                 writer.write(String.format("%d: %s", seller.getSellerID(), "[" + fuckingOutputFuckShit + "]"));
                 writer.newLine();
             }
