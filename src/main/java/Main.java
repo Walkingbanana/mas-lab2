@@ -13,8 +13,33 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.cli.*;
 
-public class Main {
-    public static void main(String[] args) throws IOException {
+public class Main
+{
+    // TODO FUCKING CHANGE THIS WHEN WE SUBMIT THIS CRAP - DO YOU HEAR ME KAI?
+    public static final boolean DEV_MODE = true;
+
+    public static void main(String[] args) throws Exception
+    {
+        try
+        {
+            RunMainProgram(args);
+        }
+        catch (IllegalArgumentException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        catch (Exception e) // Gotta catch em all... You son of a bitch I'm in!
+        {
+            System.out.println("An unexpected error occurred.");
+            if(DEV_MODE)
+            {
+                throw e;
+            }
+        }
+    }
+
+    public static void RunMainProgram(String[] args) throws IOException
+    {
         // Parse the arguments
         AuctionArgumentParser parser = new AuctionArgumentParser();
         try
@@ -36,10 +61,12 @@ public class Main {
         }
 
         // Generate all buyers
-        ArrayList<MASBidderAgent> buyers = new ArrayList<>(parser.getNumberOfBuyers());
-        for(int i = 0; i < parser.getNumberOfBuyers(); i++)
+        double[] increaseFactors = parser.getIncreaseFactors();
+        double[] decreaseFactors = parser.getDecreaseFactors();
+        ArrayList<MASBidderAgent> buyers = new ArrayList<>(increaseFactors.length);
+        for(int i = 0; i < increaseFactors.length; i++)
         {
-            buyers.add(new MASBidderAgent(1.2, 0.8));
+            buyers.add(new MASBidderAgent(increaseFactors[i], decreaseFactors[i]));
         }
 
         // Run the auction
