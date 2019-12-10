@@ -34,6 +34,10 @@ public abstract class AbstractAuction implements Auction {
 
             Collections.shuffle(sellers);
             for (Seller seller : sellers) {
+
+                if (biddingAgents.size() == 0){
+                    break;
+                }
                 AuctionResult result = runAuction(biddingAgents, seller);
 
                 for (BidderAgent agent : biddingAgents) {

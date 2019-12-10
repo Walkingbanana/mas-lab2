@@ -21,14 +21,14 @@ public class VickreyAuction extends AbstractAuction {
 
         double[] bids = new double[agents.size()];
         for (int i = 0; i < bids.length; i++) {
-            bids[i] = agents.get(i).bid(seller, startingPrice);
+            bids[i] = (agents.get(i).bid(seller, startingPrice));
         }
 
         double marketPrice = getMarketPrice(bids);
 
         //Todo refactor to make this nice
         double highestWinningPrice = -1;
-        int highIndex = -1;
+        int highIndex = 0;
         double secondHighestWinningPrice = -1;
         for (int i = 0; i < bids.length; i++) {
             if (bids[i] > marketPrice) {
