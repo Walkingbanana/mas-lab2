@@ -1,16 +1,18 @@
-package auction;
+package auction.monitor;
 
+import auction.AuctionResult;
+import auction.Seller;
 import bidder.BidderAgent;
 
 import java.io.*;
 import java.util.*;
 
-public class AuctionMonitor implements Closeable
+public class BiddingFactorMonitor implements Closeable, AuctionMonitor
 {
     private BufferedWriter writer;
     private List<BidderAgent> agents;
 
-    public AuctionMonitor(List<BidderAgent> agents, String outputFilePath) throws IOException {
+    public BiddingFactorMonitor(List<BidderAgent> agents, String outputFilePath) throws IOException {
 
         writer = new BufferedWriter(new FileWriter(outputFilePath));
         this.agents = agents;
@@ -28,7 +30,7 @@ public class AuctionMonitor implements Closeable
                     builder.append(String.format("Agent_%d_Seller_%d,", agent.getAgentID(), seller.getSellerID()));
                 }
             }
-            builder.deleteCharAt(builder.length()-1); // Remove last comma
+            builder.deleteCharAt(builder.length()-1); // Remove last coma
             writer.write(builder.toString());
             writer.newLine();
         }
@@ -47,6 +49,8 @@ public class AuctionMonitor implements Closeable
                 for(Seller seller : agent.getBiddingFactors().keySet())
                 {
                     builder.append(String.format(Locale.ROOT, "%f,", agent.getBiddingFactors().get(seller)));
+//                    builder.append(String.format(Locale.ROOT, "%f,",result.getBids().get(agent)));
+
                 }
             }
             builder.deleteCharAt(builder.length()-1); // Remove last comma

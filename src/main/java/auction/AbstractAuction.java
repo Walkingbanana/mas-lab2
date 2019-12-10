@@ -1,12 +1,11 @@
 package auction;
 
+import auction.monitor.AuctionMonitor;
+import auction.monitor.BiddingFactorMonitor;
 import bidder.BidderAgent;
 import bidder.LeveledBidderAgent;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public abstract class AbstractAuction implements Auction {
 

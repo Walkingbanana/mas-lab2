@@ -69,3 +69,4 @@ if __name__ == "__main__":
     
     num_agents, num_sellers = extract_num_agents_and_sellers(data.columns)
     plot_for_seller_and_agent(data, 0, 0, num_agents)
+    plot_for_seller_and_agent(data, 0, 1, num_agents)

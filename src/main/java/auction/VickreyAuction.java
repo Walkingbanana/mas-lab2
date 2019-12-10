@@ -1,5 +1,7 @@
 package auction;
 
+import auction.monitor.AuctionMonitor;
+import auction.monitor.BiddingFactorMonitor;
 import bidder.BidderAgent;
 
 import java.util.HashMap;
@@ -51,7 +53,7 @@ public class VickreyAuction extends AbstractAuction {
         for (int i = 0; i < bids.length; i++) {
             bidMap.put(agents.get(i), bids[i]);
         }
-        return new AuctionResult(agents.get(highIndex), seller, marketPrice, highestWinningPrice, secondHighestWinningPrice, bidMap);
+        return new AuctionResult(agents.get(highIndex), seller, startingPrice, marketPrice, highestWinningPrice, secondHighestWinningPrice, bidMap);
     }
 
 }

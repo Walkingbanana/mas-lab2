@@ -1,4 +1,7 @@
 import auction.*;
+import auction.monitor.AuctionMonitor;
+import auction.monitor.BidMonitor;
+import auction.monitor.BiddingFactorMonitor;
 import bidder.BidderAgent;
 import bidder.LeveledBidderAgent;
 import bidder.MASBidderAgent;
@@ -63,7 +66,7 @@ public class Main {
         }
 
         // Run the auction
-        try (AuctionMonitor monitor = new AuctionMonitor(buyers, "./agents_development.csv")) {
+        try (AuctionMonitor monitor = new BidMonitor(buyers, "./bids.csv")) {
             AbstractAuction auction = new VickreyAuction(parser.getUniversalStartingPrice(), monitor);
             AuctionScenarioResult results = auction.runAuctionRounds(parser.getNumberOfRounds(), sellers, buyers);
 
