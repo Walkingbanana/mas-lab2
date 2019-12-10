@@ -23,7 +23,7 @@ public class ScenarioStatistics {
         this.marketPriceDevelopment = marketPriceDevelopment;
     }
 
-    public void setBuyerProfits(Map<BidderAgent,Double> buyerProfits) {
+    public void setBuyerProfits(Map<BidderAgent, Double> buyerProfits) {
         this.buyerProfits = buyerProfits;
     }
 

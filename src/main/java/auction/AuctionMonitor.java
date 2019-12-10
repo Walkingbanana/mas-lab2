@@ -1,7 +1,6 @@
 package auction;
 
-import auction.AuctionResult;
-import bidder.MASBidderAgent;
+import bidder.BidderAgent;
 
 import java.io.*;
 import java.util.*;
@@ -9,9 +8,9 @@ import java.util.*;
 public class AuctionMonitor implements Closeable
 {
     private BufferedWriter writer;
-    private List<MASBidderAgent> agents;
+    private List<BidderAgent> agents;
 
-    public AuctionMonitor(List<MASBidderAgent> agents, String outputFilePath) throws IOException {
+    public AuctionMonitor(List<BidderAgent> agents, String outputFilePath) throws IOException {
 
         writer = new BufferedWriter(new FileWriter(outputFilePath));
         this.agents = agents;
@@ -22,7 +21,7 @@ public class AuctionMonitor implements Closeable
         try
         {
             StringBuilder builder = new StringBuilder();
-            for(MASBidderAgent agent : agents)
+            for(BidderAgent agent : agents)
             {
                 for(Seller seller : agent.getBiddingFactors().keySet())
                 {
@@ -43,7 +42,7 @@ public class AuctionMonitor implements Closeable
         try
         {
             StringBuilder builder = new StringBuilder();
-            for(MASBidderAgent agent : agents)
+            for(BidderAgent agent : agents)
             {
                 for(Seller seller : agent.getBiddingFactors().keySet())
                 {

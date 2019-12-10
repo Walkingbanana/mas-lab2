@@ -11,6 +11,7 @@ public class AuctionArgumentParser
     private Option roundsOption;
     private Option startingPriceOption;
     private Option outputFilePath;
+    private Option anullmentFee;
 
     private CommandLine cmd;
     private double[] increaseFactors;
@@ -45,6 +46,10 @@ public class AuctionArgumentParser
         decreaseFactorsOption.setOptionalArg(true);
         decreaseFactorsOption.setArgs(Option.UNLIMITED_VALUES);
         allOptions.addOption(decreaseFactorsOption);
+
+        anullmentFee = new Option("af", "anullmentFee", true, "The anullment fee for a bidder to retract from a purchase. If this is specified, leveled commitment auctions will be used.");
+        anullmentFee.setOptionalArg(true);
+        allOptions.addOption(anullmentFee);
     }
 
     public void parse(String[] args) throws ParseException
@@ -109,5 +114,17 @@ public class AuctionArgumentParser
     public String getOutputFilePath()
     {
         return cmd.getOptionValue(outputFilePath.getOpt(), "./output.txt");
+    }
+
+    public double getAnullmentFee(){
+        String arg = cmd.getOptionValue(anullmentFee.getOpt());
+        if(arg == null || arg.isEmpty()){
+            return -1d;
+        }
+        double anullmentFee = Double.parseDouble(arg);
+        if(anullmentFee < 0){
+            throw new IllegalArgumentException("The anullment fee hast to be greater than zero.");
+        }
+        return anullmentFee;
     }
 }

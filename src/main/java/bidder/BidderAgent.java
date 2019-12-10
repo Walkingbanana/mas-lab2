@@ -4,6 +4,7 @@ import auction.AuctionResult;
 import auction.Seller;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BidderAgent {
 
@@ -14,4 +15,6 @@ public interface BidderAgent {
     void update(AuctionResult result);
 
     void startAuction(List<Seller> sellers);
+
+    Map<Seller, Double> getBiddingFactors();
 }

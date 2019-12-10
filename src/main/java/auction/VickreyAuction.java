@@ -8,16 +8,12 @@ import java.util.Map;
 
 public class VickreyAuction extends AbstractAuction {
 
-
-    private double maximumStartingPrice;
-
     public VickreyAuction(double maximumStartingPrice, AuctionMonitor monitor) {
-        super(monitor);
-        this.maximumStartingPrice = maximumStartingPrice;
+        super(monitor, maximumStartingPrice);
     }
 
     public VickreyAuction(double maximumStartingPrice) {
-        this.maximumStartingPrice = maximumStartingPrice;
+        super(maximumStartingPrice);
     }
 
     public AuctionResult runAuction(List<? extends BidderAgent> agents, Seller seller) {
@@ -47,7 +43,7 @@ public class VickreyAuction extends AbstractAuction {
             }
         }
 
-        if(secondHighestWinningPrice < 0){
+        if (secondHighestWinningPrice < 0) {
             secondHighestWinningPrice = (highestWinningPrice + startingPrice) / 2;
         }
 
@@ -57,6 +53,5 @@ public class VickreyAuction extends AbstractAuction {
         }
         return new AuctionResult(agents.get(highIndex), seller, marketPrice, highestWinningPrice, secondHighestWinningPrice, bidMap);
     }
-
 
 }

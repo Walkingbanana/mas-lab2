@@ -1,5 +1,6 @@
 import auction.*;
 import bidder.BidderAgent;
+import bidder.LeveledBidderAgent;
 import bidder.MASBidderAgent;
 
 import java.io.BufferedWriter;
@@ -13,41 +14,30 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.cli.*;
 
-public class Main
-{
-    // TODO FUCKING CHANGE THIS WHEN WE SUBMIT THIS CRAP - DO YOU HEAR ME KAI?
+public class Main {
+    // TODO FUCKING CHANGE THIS WHEN WE SUBMIT THIS CRAP - DO YOU HEAR ME KAI? - NO
     public static final boolean DEV_MODE = true;
 
-    public static void main(String[] args) throws Exception
-    {
-        try
-        {
+    public static void main(String[] args) throws Exception {
+        try {
             RunMainProgram(args);
-        }
-        catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-        }
-        catch (Exception e) // Gotta catch em all... You son of a bitch I'm in!
+        } catch (Exception e) // Gotta catch em all... You son of a bitch I'm in!
         {
             System.out.println("An unexpected error occurred.");
-            if(DEV_MODE)
-            {
+            if (DEV_MODE) {
                 throw e;
             }
         }
     }
 
-    public static void RunMainProgram(String[] args) throws IOException
-    {
+    public static void RunMainProgram(String[] args) throws IOException {
         // Parse the arguments
         AuctionArgumentParser parser = new AuctionArgumentParser();
-        try
-        {
+        try {
             parser.parse(args);
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             System.out.println(e.getMessage());
             parser.printHelp();
             System.exit(1);
@@ -55,23 +45,25 @@ public class Main
 
         // Generate all sellers
         List<Seller> sellers = new ArrayList(parser.getNumberOfSellers());
-        for(int i = 0; i < parser.getNumberOfSellers(); i++)
-        {
+        for (int i = 0; i < parser.getNumberOfSellers(); i++) {
             sellers.add(new RandomSeller());
         }
 
         // Generate all buyers
+        double anullmentFee = parser.getAnullmentFee();
         double[] increaseFactors = parser.getIncreaseFactors();
         double[] decreaseFactors = parser.getDecreaseFactors();
-        ArrayList<MASBidderAgent> buyers = new ArrayList<>(increaseFactors.length);
-        for(int i = 0; i < increaseFactors.length; i++)
-        {
-            buyers.add(new MASBidderAgent(increaseFactors[i], decreaseFactors[i]));
+        ArrayList<BidderAgent> buyers = new ArrayList<>(increaseFactors.length);
+        for (int i = 0; i < increaseFactors.length; i++) {
+            if (anullmentFee < 0) {
+                buyers.add(new MASBidderAgent(increaseFactors[i], decreaseFactors[i]));
+            } else {
+                buyers.add(new LeveledBidderAgent(increaseFactors[i], decreaseFactors[i], anullmentFee));
+            }
         }
 
         // Run the auction
-        try(AuctionMonitor monitor = new AuctionMonitor(buyers, "./agents_development.csv"))
-        {
+        try (AuctionMonitor monitor = new AuctionMonitor(buyers, "./agents_development.csv")) {
             AbstractAuction auction = new VickreyAuction(parser.getUniversalStartingPrice(), monitor);
             AuctionScenarioResult results = auction.runAuctionRounds(parser.getNumberOfRounds(), sellers, buyers);
 
@@ -82,14 +74,12 @@ public class Main
 
     public static void WriteResults(AuctionScenarioResult results, String filePath) throws IOException {
         ScenarioStatistics stats = results.calculateStatistics();
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath)))
-        {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             // Write agents profits
             Map<BidderAgent, Double> buyerProfits = stats.getBuyerProfits();
             writer.write("--- Agents Profits ---");
             writer.newLine();
-            for(BidderAgent agent : buyerProfits.keySet())
-            {
+            for (BidderAgent agent : buyerProfits.keySet()) {
                 writer.write(String.format("%d: %f", agent.getAgentID(), buyerProfits.get(agent)));
                 writer.newLine();
             }
@@ -99,8 +89,7 @@ public class Main
             writer.newLine();
             writer.write("--- Sellers Profits ---");
             writer.newLine();
-            for(Seller seller : sellerProfits.keySet())
-            {
+            for (Seller seller : sellerProfits.keySet()) {
                 writer.write(String.format("%d: %f", seller.getSellerID(), sellerProfits.get(seller)));
                 writer.newLine();
             }
@@ -110,8 +99,7 @@ public class Main
             writer.newLine();
             writer.write("--- Market Price Development ---");
             writer.newLine();
-            for(Seller seller : marketPrices.keySet())
-            {
+            for (Seller seller : marketPrices.keySet()) {
                 // Prime example of why Java is fucking stupid, what the fuck is this shit I just wanna concat a double list with a formatter
                 String fuckingOutputFuckShit = marketPrices.get(seller).stream().map(d -> String.format(Locale.ROOT, "%.2f", d)).collect(Collectors.joining(","));
                 writer.write(String.format("%d: %s", seller.getSellerID(), "[" + fuckingOutputFuckShit + "]"));

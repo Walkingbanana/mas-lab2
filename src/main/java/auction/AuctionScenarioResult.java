@@ -9,9 +9,9 @@ import java.util.Map;
 
 public class AuctionScenarioResult {
 
-    private Map<BidderAgent, List<AuctionResult>> scenarioResult;
-    private List<List<AuctionResult>> roundAuctionResults;
-    private List<AuctionResult> currentRound;
+    protected Map<BidderAgent, List<AuctionResult>> scenarioResult;
+    protected List<List<AuctionResult>> roundAuctionResults;
+    protected List<AuctionResult> currentRound;
 
     public AuctionScenarioResult(List<? extends BidderAgent> agents) {
         if (agents == null) {
@@ -51,7 +51,7 @@ public class AuctionScenarioResult {
         return stat;
     }
 
-    private Map<Seller, Double> calcSellerProfits() {
+    protected Map<Seller, Double> calcSellerProfits() {
         Map<Seller, Double> sellerProfits = new HashMap<>();
 
         for (List<AuctionResult> results : roundAuctionResults) {
@@ -62,11 +62,9 @@ public class AuctionScenarioResult {
             }
         }
         return sellerProfits;
-
-
     }
 
-    private Map<Seller, List<Double>> calcMarketPriceDevelopment() {
+    protected Map<Seller, List<Double>> calcMarketPriceDevelopment() {
         Map<Seller, List<Double>> sellerPrices = new HashMap<>();
         for (List<AuctionResult> results : roundAuctionResults) {
             for (AuctionResult result : results) {
@@ -77,7 +75,7 @@ public class AuctionScenarioResult {
         return sellerPrices;
     }
 
-    private Map<BidderAgent, Double> calcBuyerProfits() {
+    protected Map<BidderAgent, Double> calcBuyerProfits() {
         Map<BidderAgent, Double> resultMap = new HashMap<>();
 
         for (BidderAgent agent : scenarioResult.keySet()) {
