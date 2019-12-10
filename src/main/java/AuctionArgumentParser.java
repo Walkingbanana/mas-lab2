@@ -33,7 +33,7 @@ public class AuctionArgumentParser
         startingPriceOption.setRequired(true);
         allOptions.addOption(startingPriceOption);
 
-        outputFilePath = new Option("outputFile", "outputFile", true, "The filepath in which the simulation will write the results.");
+        outputFilePath = new Option("of", "outputFile", true, "The filepath in which the simulation will write the results.");
         outputFilePath.setOptionalArg(true);
         allOptions.addOption(outputFilePath);
 

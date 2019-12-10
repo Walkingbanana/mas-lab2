@@ -21,14 +21,9 @@ public class RandomSeller implements Seller {
         return sellerID;
     }
 
-    private double startingPrice = -1;
-
     @Override
     public double getStartingPrice(double max)
     {
-        if(startingPrice < 0)
-            startingPrice = random.nextDouble() * max;
-
         return random.nextDouble() * max;
     }
 
