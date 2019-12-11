@@ -34,7 +34,8 @@ public class BidMonitor implements AuctionMonitor {
             }
 
             builder.append("seller_id,");
-            builder.append("starting_price");
+            builder.append("starting_price,");
+            builder.append("market_price");
             writer.write(builder.toString());
             writer.newLine();
         }
@@ -65,6 +66,8 @@ public class BidMonitor implements AuctionMonitor {
             builder.append(result.getSeller().getSellerID());
             builder.append(",");
             builder.append(result.getStartingPrice());
+            builder.append(",");
+            builder.append(result.getMarketPrice());
             writer.write(builder.toString());
             writer.newLine();
         }
