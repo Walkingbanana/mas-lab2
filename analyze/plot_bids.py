@@ -28,23 +28,21 @@ def plot_bids_per_agent(bid_results):
     plot_all(bid_results)
     
 def bidding_factor_agents(data):
-    bf = data[['Bidding_Factor_0', 'Bidding_Factor_1', 'Bidding_Factor_2', 'Bidding_Factor_3','market_price']]
+    bf = data[['Bidding_Factor_0', 'Bidding_Factor_1', 'Bidding_Factor_2', 'Bidding_Factor_3']]
+    mp = data[['market_price']]
     
-    return bf
+    return bf, mp
 
-def plot_bidding_factors(bidding_factors):
+def plot_bidding_factors(bidding_factors, market_price):
     fig, ax1 = plt.subplots()
-    
-    color = 'tab:red'
     ax1.set_xlabel("Rounds x Auctions")
-    ax1.set_ylabel("market price")
-    ax1.plot(bidding_factors['market_price'], color = color)
+    ax1.set_ylabel("Bidding Factor")
+    ax1.plot(bidding_factors)
     
     ax2 = ax1.twinx()
-    
-    color = 'tab:blue'
-    ax2.set_ylabel("Bidding Factor")
-    ax2.plot(bidding_factors['Bidding_Factor_0'], color = color)
+    color = 'tab:pink'
+    ax2.set_ylabel("market price")
+    ax2.plot(market_price, color = color)
     ax2.tick_params(axis='y', labelcolor = color)
     
     fig.tight_layout()
@@ -57,6 +55,6 @@ if __name__ == "__main__":
     bid_results = bids_per_agent(data)
     plot_bids_per_agent(bid_results)
     
-    bidding_factors = bidding_factor_agents(data)
-    plot_bidding_factors(bidding_factors)
+    bidding_factors, market_price = bidding_factor_agents(data)
+    plot_bidding_factors(bidding_factors, market_price)
     
