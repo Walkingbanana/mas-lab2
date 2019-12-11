@@ -47,7 +47,7 @@ public class AuctionArgumentParser
         decreaseFactorsOption.setArgs(Option.UNLIMITED_VALUES);
         allOptions.addOption(decreaseFactorsOption);
 
-        anullmentFee = new Option("af", "anullmentFee", true, "The anullment fee for a bidder to retract from a purchase. If this is specified, leveled commitment auctions will be used.");
+        anullmentFee = new Option("pf", "penaltyFactor", true, "The penalty factor for a bidder to retract from a purchase. If this is specified, leveled commitment auctions will be used.");
         anullmentFee.setOptionalArg(true);
         allOptions.addOption(anullmentFee);
     }
@@ -123,7 +123,7 @@ public class AuctionArgumentParser
         }
         double anullmentFee = Double.parseDouble(arg);
         if(anullmentFee < 0){
-            throw new IllegalArgumentException("The anullment fee hast to be greater than zero.");
+            throw new IllegalArgumentException("The penalty factor hast to be greater than zero.");
         }
         return anullmentFee;
     }
