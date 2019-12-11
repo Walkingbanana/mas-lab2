@@ -31,6 +31,7 @@ public class BidMonitor implements AuctionMonitor {
             {
                 builder.append(String.format("Agent_%d,", agent.getAgentID()));
                 builder.append(String.format("Bidding_Factor_%d,", agent.getAgentID()));
+                builder.append(String.format("Participated_%d,", agent.getAgentID()));
             }
 
             builder.append("seller_id,");
@@ -53,14 +54,12 @@ public class BidMonitor implements AuctionMonitor {
                 boolean b = result.getBids().containsKey(a);
                 if(b) {
                     builder.append(result.getBids().get(a));
-                    builder.append(",");
+                }
 
-                }
-                else
-                {
-                    builder.append("-1,");
-                }
+                builder.append(",");
                 builder.append(a.getBiddingFactors().get(result.getSeller()));
+                builder.append(",");
+                builder.append(b ? "1" : "0");
                 builder.append(",");
             }
             builder.append(result.getSeller().getSellerID());

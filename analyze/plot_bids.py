@@ -1,60 +1,30 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 import numpy as np
-# import tensorflow as keras
 
-def plot_all(data):
-    data.plot()
-    plt.legend()
-    plt.xlabel("Rounds x Auctions")
-    plt.ylabel("Bidding Factor")
-    plt.show()
+def get_agent_count(data): 
+    agent_names = data.filter(like='Agent').columns
+    return len(agent_names)
 
-def bids_per_agent(data): 
-    agent_bids = data[['Agent_0', 'Agent_1', 'Agent_2', 'Agent_3']].copy()
-    
-    for bids in agent_bids.iteritems():
-        agent_name = bids[0]
-        bid = list(bids[1])
-        for index, value in enumerate(bid):
-            if value == -1:
-                bid[index] = bid[index-1]
-            agent_bids[agent_name] = pd.Series(bid)
-    
-    return agent_bids
-
-
-def plot_bids_per_agent(bid_results):
-    plot_all(bid_results)
-    
-def bidding_factor_agents(data):
-    bf = data[['Bidding_Factor_0', 'Bidding_Factor_1', 'Bidding_Factor_2', 'Bidding_Factor_3']]
-    mp = data[['market_price']]
-    
-    return bf, mp
-
-def plot_bidding_factors(bidding_factors, market_price):
-    fig, ax1 = plt.subplots()
-    ax1.set_xlabel("Rounds x Auctions")
-    ax1.set_ylabel("Bidding Factor")
-    ax1.plot(bidding_factors)
-    
-    ax2 = ax1.twinx()
-    color = 'tab:pink'
-    ax2.set_ylabel("market price")
-    ax2.plot(market_price, color = color)
-    ax2.tick_params(axis='y', labelcolor = color)
-    
-    fig.tight_layout()
-    plt.show()
 
 if __name__ == "__main__":
     target_file = "bids.csv"
     data = pd.read_csv(target_file, sep=",")
+    data = data.fillna(method='ffill')
     
-    bid_results = bids_per_agent(data)
-    plot_bids_per_agent(bid_results)
+    arr = ['market_price', 'Agent_0']
     
-    bidding_factors, market_price = bidding_factor_agents(data)
-    plot_bidding_factors(bidding_factors, market_price)
     
+    for seller_id, df in data.groupby(by='seller_id'):
+        print(seller_id)
+        avg_bidding_factor = df['market_price']/df['starting_price']
+        avg_bidding_factor.plot(style='.-')
+        df['Bidding_Factor_0'].plot(style='.-')
+        df['Bidding_Factor_1'].plot(style='.-')
+        df['Bidding_Factor_2'].plot(style='.-')
+        df['Bidding_Factor_3'].plot(style='.-')
+        plt.legend()
+        plt.show()
+        break
+    
+    data.reset_index().plot(kind='scatter', x='index' ,y='Bidding_Factor_0', color=data['Participated_0'].values)
