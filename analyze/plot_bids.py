@@ -47,7 +47,7 @@ if __name__ == "__main__":
             plot_bidding_factors(df, agent)
             
         plt.legend()
-        plt.title(f"Bidding-factor development")
+        plt.title(f"Bidding-factor development for seller {seller_id}")
         plt.xlabel(f"Auction")
         plt.ylabel(f"Bidding-factor")
         plt.show()
