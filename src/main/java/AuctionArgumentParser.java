@@ -7,6 +7,7 @@ public class AuctionArgumentParser
 
     private Option increaseFactorsOption;
     private Option decreaseFactorsOption;
+    private Option biddingFactorsOptions;
 
     private Option roundsOption;
     private Option startingPriceOption;
@@ -47,6 +48,10 @@ public class AuctionArgumentParser
         decreaseFactorsOption.setArgs(Option.UNLIMITED_VALUES);
         allOptions.addOption(decreaseFactorsOption);
 
+        biddingFactorsOptions = new Option("bf", "biddingFactors", true, "The initial bidding factors for all buyer and seller combinations. The number of bidding factors have to be equal to the number of sellers times number of buyers. If not specified, random bidding factors between [1,2] will be chosen.");
+        biddingFactorsOptions.setOptionalArg(true);
+        allOptions.addOption(biddingFactorsOptions);
+
         anullmentFee = new Option("pf", "penaltyFactor", true, "The penalty factor for a bidder to retract from a purchase. If this is specified, leveled commitment auctions will be used.");
         anullmentFee.setOptionalArg(true);
         allOptions.addOption(anullmentFee);
@@ -58,8 +63,8 @@ public class AuctionArgumentParser
         cmd = parser.parse(allOptions, args);
 
         // Parse increase and decrease factors
-        String[] strValuesDecrease = cmd.getOptionValue(decreaseFactorsOption.getOpt(), "0.95,0.95,0.95,0.95").split(",");
-        String[] strValuesIncrease = cmd.getOptionValue(increaseFactorsOption.getOpt(), "1.2,1.2,1.2,1.2").split(",");
+        String[] strValuesDecrease = cmd.getOptionValue(decreaseFactorsOption.getOpt(), "0.99,0.99,0.99,0.99").split(",");
+        String[] strValuesIncrease = cmd.getOptionValue(increaseFactorsOption.getOpt(), "1.01,1.01,1.01,1.01").split(",");
         if(strValuesDecrease.length != strValuesIncrease.length)
         {
             String errorMessage = String.format("The number of increase factors (%d) has to be the same as the number of decrease factors (%d).", strValuesIncrease.length, strValuesDecrease.length);
@@ -94,6 +99,33 @@ public class AuctionArgumentParser
     public double[] getIncreaseFactors()
     {
         return increaseFactors;
+    }
+
+    public double[][] getBiddingFactors()
+    {
+        String arg = cmd.getOptionValue(biddingFactorsOptions.getOpt());
+        if(arg == null || arg.isEmpty())
+        {
+            return null;
+        }
+
+        String[] splits = arg.split(",");
+        if(splits.length != getNumberOfSellers() * getDecreaseFactors().length)
+        {
+            String errorMessage = String.format("The number of bidding factors (%s) have to be equal to the number of sellers x number of buyers.", splits.length, getNumberOfSellers() * getDecreaseFactors().length);
+            throw new IllegalArgumentException(errorMessage);
+        }
+
+        double[][] biddingFactors = new double[getNumberOfSellers()][getDecreaseFactors().length];
+        for(int i = 0; i < biddingFactors.length; i++)
+        {
+            for(int x = 0; x < biddingFactors.length; x++)
+            {
+                biddingFactors[i][x] = Double.parseDouble(splits[i]);
+            }
+        }
+
+        return biddingFactors;
     }
 
     public int getNumberOfSellers()
