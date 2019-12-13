@@ -14,7 +14,7 @@ def plot_normalized_market_price(data):
     That way we have a normalized market price, which can easily be compared with the bidding factors
     """
     avg_bidding_factor = data['market_price']/data['starting_price']
-    avg_bidding_factor.plot(style="-", label="Marketprice")
+    avg_bidding_factor.plot(style="-", label="Avg. Marketprice")
 
 def plot_bidding_factors(data, agent_id, show_participation=True):
     bidding_column = f'Bidding_Factor_{agent_id}'
@@ -24,7 +24,7 @@ def plot_bidding_factors(data, agent_id, show_participation=True):
         plt.scatter(data.index, 
                     data[bidding_column],
                     c=data[participation_column],
-                    cmap=mpl.colors.ListedColormap(['red', 'green']),
+                    cmap=mpl.colors.ListedColormap(['darkred', 'darkgreen']),
                     s=3,
                     zorder=10)
     
@@ -42,8 +42,12 @@ if __name__ == "__main__":
     for seller_id, df in data.groupby(by='seller_id'):
         plt.figure(figsize=(12.8, 9.6))
         plot_normalized_market_price(df)
+        
         for agent in range(get_agent_count(data)):
             plot_bidding_factors(df, agent)
+            
         plt.legend()
+        plt.title(f"Bidding-factor development")
+        plt.xlabel(f"Auction")
+        plt.ylabel(f"Bidding-factor")
         plt.show()
-        break
