@@ -7,8 +7,10 @@ import bidder.BidderAgent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class VickreyAuction extends AbstractAuction {
+public class VickreyAuction extends AbstractAuction
+{
 
     public VickreyAuction(double maximumStartingPrice, AuctionMonitor monitor) {
         super(monitor, maximumStartingPrice);
@@ -30,7 +32,7 @@ public class VickreyAuction extends AbstractAuction {
 
         //Todo refactor to make this nice
         double highestWinningPrice = -1;
-        int highIndex = 0;
+        int highIndex = ThreadLocalRandom.current().nextInt(0, agents.size()); // Choose a random agent -> fixes an issue when all the bids are the same
         double secondHighestWinningPrice = -1;
         for (int i = 0; i < bids.length; i++) {
             if (bids[i] > marketPrice) {
