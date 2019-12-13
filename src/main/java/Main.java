@@ -56,14 +56,13 @@ public class Main {
         double anullmentFee = parser.getAnullmentFee();
         double[] increaseFactors = parser.getIncreaseFactors();
         double[] decreaseFactors = parser.getDecreaseFactors();
-        double[][] biddingFactors = parser.getBiddingFactors();
         ArrayList<BidderAgent> buyers = new ArrayList<>(increaseFactors.length);
         for (int i = 0; i < increaseFactors.length; i++)
         {
             if (anullmentFee < 0) {
-                buyers.add(new MASBidderAgent(increaseFactors[i], decreaseFactors[i], biddingFactors[i]));
+                buyers.add(new MASBidderAgent(increaseFactors[i], decreaseFactors[i]));
             } else {
-                buyers.add(new LeveledBidderAgent(increaseFactors[i], decreaseFactors[i], , biddingFactors[i], anullmentFee));
+                buyers.add(new LeveledBidderAgent(increaseFactors[i], decreaseFactors[i], anullmentFee));
             }
         }
 

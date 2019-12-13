@@ -7,7 +7,6 @@ public class AuctionArgumentParser
 
     private Option increaseFactorsOption;
     private Option decreaseFactorsOption;
-    private Option biddingFactorsOptions;
 
     private Option roundsOption;
     private Option startingPriceOption;
@@ -47,10 +46,6 @@ public class AuctionArgumentParser
         decreaseFactorsOption.setOptionalArg(true);
         decreaseFactorsOption.setArgs(Option.UNLIMITED_VALUES);
         allOptions.addOption(decreaseFactorsOption);
-
-        biddingFactorsOptions = new Option("bf", "biddingFactors", true, "The initial bidding factors for all buyer and seller combinations. The number of bidding factors have to be equal to the number of sellers times number of buyers. If not specified, random bidding factors between [1,2] will be chosen.");
-        biddingFactorsOptions.setOptionalArg(true);
-        allOptions.addOption(biddingFactorsOptions);
 
         anullmentFee = new Option("pf", "penaltyFactor", true, "The penalty factor for a bidder to retract from a purchase. If this is specified, leveled commitment auctions will be used.");
         anullmentFee.setOptionalArg(true);
@@ -99,33 +94,6 @@ public class AuctionArgumentParser
     public double[] getIncreaseFactors()
     {
         return increaseFactors;
-    }
-
-    public double[][] getBiddingFactors()
-    {
-        String arg = cmd.getOptionValue(biddingFactorsOptions.getOpt());
-        if(arg == null || arg.isEmpty())
-        {
-            return null;
-        }
-
-        String[] splits = arg.split(",");
-        if(splits.length != getNumberOfSellers() * getDecreaseFactors().length)
-        {
-            String errorMessage = String.format("The number of bidding factors (%s) have to be equal to the number of sellers x number of buyers.", splits.length, getNumberOfSellers() * getDecreaseFactors().length);
-            throw new IllegalArgumentException(errorMessage);
-        }
-
-        double[][] biddingFactors = new double[getNumberOfSellers()][getDecreaseFactors().length];
-        for(int i = 0; i < biddingFactors.length; i++)
-        {
-            for(int x = 0; x < biddingFactors.length; x++)
-            {
-                biddingFactors[i][x] = Double.parseDouble(splits[i]);
-            }
-        }
-
-        return biddingFactors;
     }
 
     public int getNumberOfSellers()
