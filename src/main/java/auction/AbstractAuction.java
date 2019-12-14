@@ -1,11 +1,13 @@
 package auction;
 
 import auction.monitor.AuctionMonitor;
-import auction.monitor.BiddingFactorMonitor;
 import bidder.BidderAgent;
 import bidder.LeveledBidderAgent;
+import bidder.MASBidderAgent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class AbstractAuction implements Auction {
 
@@ -24,6 +26,7 @@ public abstract class AbstractAuction implements Auction {
 
     public AuctionScenarioResult runAuctionRounds(int rounds, List<Seller> sellers, List<? extends BidderAgent> agents) {
         AuctionScenarioResult scenarioResult = new AuctionScenarioResult(agents);
+        List<AuctionResult> resultsForCurrentRound = new ArrayList<>(sellers.size());
         agents.forEach(agent -> agent.startAuction(sellers));
 
         this.monitor.onRoundAuctionStart();
@@ -34,7 +37,7 @@ public abstract class AbstractAuction implements Auction {
             Collections.shuffle(sellers);
             for (Seller seller : sellers) {
 
-                if (biddingAgents.size() == 0){
+                if (biddingAgents.size() == 0) {
                     break;
                 }
                 AuctionResult result = runAuction(biddingAgents, seller);
@@ -43,24 +46,38 @@ public abstract class AbstractAuction implements Auction {
                     agent.update(result);
                 }
 
-                if (result.getWinner() instanceof LeveledBidderAgent) {
-                    ((LeveledBidderAgent) result.getWinner()).resetAuctionRound();
-                } else {
+                if (result.getWinner() instanceof MASBidderAgent) {
                     biddingAgents.remove(result.getWinner());
                 }
                 scenarioResult.addResult(result);
                 monitor.onAuctionEnd(result);
             }
+
+            for (BidderAgent agent : agents) {
+                if (agent instanceof LeveledBidderAgent) {
+                    ((LeveledBidderAgent) agent).resetAuctionRound();
+                }
+            }
         }
+
+
+//        for (AuctionResult result : scenarioResult.)
+//
+//            ((LeveledBidderAgent) result.getWinner()).resetAuctionRound();
         return scenarioResult;
     }
 
     double getMarketPrice(double[] bids) {
         double sumBids = 0;
+        int nonBidders = 0;
         for (double bid : bids) {
+            if(bid < 0){
+                nonBidders++;
+                continue;
+            }
             sumBids += bid;
         }
-        return sumBids / bids.length;
+        return sumBids / bids.length-nonBidders;
     }
 
 }

@@ -1,15 +1,12 @@
 package auction.monitor;
 
-import auction.Auction;
 import auction.AuctionResult;
-import auction.Seller;
 import bidder.BidderAgent;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 public class BidMonitor implements AuctionMonitor {
 
@@ -22,13 +19,10 @@ public class BidMonitor implements AuctionMonitor {
         this.agents = agents;
     }
 
-    public void onRoundAuctionStart()
-    {
-        try
-        {
+    public void onRoundAuctionStart() {
+        try {
             StringBuilder builder = new StringBuilder();
-            for(BidderAgent agent : agents)
-            {
+            for (BidderAgent agent : agents) {
                 builder.append(String.format("Agent_%d,", agent.getAgentID()));
                 builder.append(String.format("Bidding_Factor_%d,", agent.getAgentID()));
                 builder.append(String.format("Participated_%d,", agent.getAgentID()));
@@ -39,20 +33,17 @@ public class BidMonitor implements AuctionMonitor {
             builder.append("market_price");
             writer.write(builder.toString());
             writer.newLine();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Error while logging\n" + e.getMessage());
         }
     }
 
-    public void onAuctionEnd(AuctionResult result){
-        try
-        {
+    public void onAuctionEnd(AuctionResult result) {
+        try {
             StringBuilder builder = new StringBuilder();
             for (BidderAgent a : agents) {
                 boolean b = result.getBids().containsKey(a);
-                if(b) {
+                if (b) {
                     builder.append(result.getBids().get(a));
                 }
 
@@ -69,15 +60,12 @@ public class BidMonitor implements AuctionMonitor {
             builder.append(result.getMarketPrice());
             writer.write(builder.toString());
             writer.newLine();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Error while logging\n" + e.getMessage());
         }
     }
 
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         writer.close();
     }
 }

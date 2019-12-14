@@ -88,4 +88,10 @@ public class AuctionScenarioResult {
         }
         return resultMap;
     }
+
+    public List<List<AuctionResult>> getRoundAuctionResults() {
+        return this.roundAuctionResults;
+    }
+
+
 }

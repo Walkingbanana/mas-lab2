@@ -50,4 +50,5 @@ if __name__ == "__main__":
         plt.title(f"Bidding-factor development for seller {seller_id}")
         plt.xlabel(f"Auction")
         plt.ylabel(f"Bidding-factor")
+        plt.savefig(f"Bidding-factor_development_for_seller_{seller_id}.pdf")
         plt.show()
