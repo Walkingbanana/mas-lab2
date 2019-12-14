@@ -35,7 +35,7 @@ public class VickreyAuction extends AbstractAuction
         int highIndex = ThreadLocalRandom.current().nextInt(0, agents.size()); // Choose a random agent -> fixes an issue when all the bids are the same
         double secondHighestWinningPrice = -1;
         for (int i = 0; i < bids.length; i++) {
-            if (bids[i] > marketPrice) {
+            if (bids[i] > marketPrice || bids[i] < 0) {
                 continue;
             }
             if (bids[i] > highestWinningPrice) {
@@ -53,6 +53,9 @@ public class VickreyAuction extends AbstractAuction
 
         Map<BidderAgent, Double> bidMap = new HashMap<>();
         for (int i = 0; i < bids.length; i++) {
+//            if(bids[i] < 0){
+//                continue;
+//            }
             bidMap.put(agents.get(i), bids[i]);
         }
         return new AuctionResult(agents.get(highIndex), seller, startingPrice, marketPrice, highestWinningPrice, secondHighestWinningPrice, bidMap);

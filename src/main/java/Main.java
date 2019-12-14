@@ -67,7 +67,7 @@ public class Main {
         }
 
         // Run the auction
-        try (AuctionMonitor monitor = new BidMonitor(buyers, "./bids.csv")) {
+        try (AuctionMonitor monitor = new BidMonitor(buyers, "./analyze/bids.csv")) {
             AbstractAuction auction = new VickreyAuction(parser.getUniversalStartingPrice(), monitor);
             AuctionScenarioResult results = auction.runAuctionRounds(parser.getNumberOfRounds(), sellers, buyers);
 

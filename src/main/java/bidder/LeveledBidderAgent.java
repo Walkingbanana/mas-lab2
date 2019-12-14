@@ -6,18 +6,21 @@ import auction.Seller;
 public class LeveledBidderAgent extends AbstractAgent {
 
     private AuctionResult wonAuction = null;
-    private final double anullmentFee;
+    private final double anullmentFeeFactor;
 
-    public LeveledBidderAgent(double increaseFactor, double decreaseFactor, double anullmentFee) {
+    public LeveledBidderAgent(double increaseFactor, double decreaseFactor, double anullmentFeeFactor) {
         super(increaseFactor, decreaseFactor);
-        this.anullmentFee = anullmentFee;
+        this.anullmentFeeFactor = anullmentFeeFactor;
     }
 
     @Override
     public double bid(Seller seller, double startingPrice) {
         double bid = super.bid(seller, startingPrice);
         if (wonAuction != null) {
-            bid -= (wonAuction.getMarketPrice() - wonAuction.getPaidPrice()) + anullmentFee;
+            bid -= (wonAuction.getMarketPrice() - wonAuction.getPaidPrice()) + (anullmentFeeFactor * wonAuction.getPaidPrice());
+        }
+        if (bid < startingPrice) {
+            return startingPrice;
         }
         return bid;
     }
