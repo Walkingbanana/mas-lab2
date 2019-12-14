@@ -20,6 +20,7 @@ def plot_bidding_factors(data, agent_id, show_participation=True):
     bidding_column = f'Bidding_Factor_{agent_id}'
     participation_column = f'Participated_{agent_id}'
     
+    data[bidding_column].plot(style='-')
     if show_participation:
         plt.scatter(data.index, 
                     data[bidding_column],
@@ -27,20 +28,19 @@ def plot_bidding_factors(data, agent_id, show_participation=True):
                     cmap=mpl.colors.ListedColormap(['darkred', 'darkgreen']),
                     s=3,
                     zorder=10)
-    
-    data[bidding_column].plot(style='-')
 
 
 if __name__ == "__main__":
-    target_file = "bids.csv"
-    data = pd.read_csv(target_file, sep=",")
+    target_file = "bids"
+    data = pd.read_csv(f"{target_file}.csv", sep=",")
     data = data.fillna(method='ffill')
     
     arr = ['market_price', 'Agent_0']
     
     
     for seller_id, df in data.groupby(by='seller_id'):
-        plt.figure(figsize=(12.8, 9.6))
+        df = df.reset_index() # Reset index since we use that to specify the x-axis
+        plt.figure(figsize=(12.8, 7.6))
         plot_normalized_market_price(df)
         
         for agent in range(get_agent_count(data)):
@@ -50,4 +50,4 @@ if __name__ == "__main__":
         plt.title(f"Bidding-factor development for seller {seller_id}")
         plt.xlabel(f"Auction")
         plt.ylabel(f"Bidding-factor")
-        plt.show()
+        plt.savefig(f"{target_file}_{seller_id}")
