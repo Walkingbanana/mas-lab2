@@ -18,8 +18,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.cli.*;
 
 public class Main {
-    // TODO FUCKING CHANGE THIS WHEN WE SUBMIT THIS CRAP - DO YOU HEAR ME KAI? - NO
-    public static final boolean DEV_MODE = true;
+    public static final boolean DEV_MODE = false;
 
     public static void main(String[] args) throws Exception {
         try {
